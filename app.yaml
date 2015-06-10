@@ -9,9 +9,15 @@ handlers:
   static_files: favicon.ico
   upload: favicon\.ico
 
-- url: .*
+- url: /
   script: main.app
+
+- url: /.*
+  script: opeth.handler.app
 
 libraries:
 - name: webapp2
   version: "2.5.2"
+
+- name: jinja2
+  version: latest
