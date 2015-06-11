@@ -2,6 +2,8 @@ import cgi
 import webapp2
 from webapp2_extras import jinja2
 
+import opeth.model
+
 
 class Base(webapp2.RequestHandler):
         #: Ensure we return a webapp2 singleton for caching
@@ -22,8 +24,19 @@ class MainHandler(Base):
         self.render_template("form")
 
     def post(self):
-        template_values = {'test': self.request.get('content')}
-        self.render_template("test", template_values)
+
+        comment_store = opeth.model.Comment(content=self.request.POST['content'])
+        comment_store.put()
+
+
+        comments = opeth.model.Comment.query()
+
+        for comment in comments:
+            self.response.write(comment.content)
+            self.response.write("\n")
+
+        #template_values = {'test': self.request.POST['content']}
+        #self.render_template("test", template_values)
 
 
 app = webapp2.WSGIApplication([
