@@ -28,15 +28,13 @@ class MainHandler(Base):
         comment_store = opeth.model.Comment(content=self.request.POST['content'])
         comment_store.put()
 
+        ctx = opeth.model.ndb.get_context()
+        ctx.clear_cache()
 
         comments = opeth.model.Comment.query()
 
-        for comment in comments:
-            self.response.write(comment.content)
-            self.response.write("\n")
-
-        #template_values = {'test': self.request.POST['content']}
-        #self.render_template("test", template_values)
+        template_values = {'comments': comments}
+        self.render_template("output", template_values)
 
 
 app = webapp2.WSGIApplication([
