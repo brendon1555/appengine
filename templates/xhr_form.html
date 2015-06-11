@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script type="text/javascript">
+
+    function AJAXSubmit(oFormElement){
+        var oReq = new XMLHttpRequest();
+        oReq.open("post", oFormElement.action);
+        oReq.send(new FormData(oFormElement));
+    }
+    </script>
+    <title>Form</title>
+</head>
+<body>
+    <form action="/xhrform" method="post" onsubmit="AJAXSubmit(this); return false;">
+        <div>Your comment: <input type="text" name="content"></div>
+        <div><input type="submit" value="Submit Text"></div>
+    </form>
+</body>
+</html>

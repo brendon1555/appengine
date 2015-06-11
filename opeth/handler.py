@@ -24,7 +24,26 @@ class MainHandler(Base):
         self.render_template("form")
 
     def post(self):
+        comment_store = opeth.model.Comment(content=self.request.POST['content'])
+        comment_store.put()
 
+        ctx = opeth.model.ndb.get_context()
+        ctx.clear_cache()
+
+        comments = opeth.model.Comment.query()
+
+        template_values = {'comments': comments}
+        self.render_template("output", template_values)
+
+
+
+class XhrHandler(Base):
+
+    def get(self):
+        self.render_template("xhr_form")
+        #self.response.write(self.request.get("content"))
+
+    def post(self):
         comment_store = opeth.model.Comment(content=self.request.POST['content'])
         comment_store.put()
 
@@ -38,5 +57,6 @@ class MainHandler(Base):
 
 
 app = webapp2.WSGIApplication([
-    ('/form', MainHandler)
+    ('/form', MainHandler),
+    ('/xhrform', XhrHandler)
 ], debug=True)
