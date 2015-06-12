@@ -1,5 +1,6 @@
 import cgi
 import webapp2
+import json
 from webapp2_extras import jinja2
 
 import opeth.model
@@ -30,31 +31,43 @@ class MainHandler(Base):
         ctx = opeth.model.ndb.get_context()
         ctx.clear_cache()
 
-        comments = opeth.model.Comment.query()
+        comments = opeth.model.Comment.query().order(opeth.model.Comment.date_added)
 
         template_values = {'comments': comments}
         self.render_template("output", template_values)
 
+#------------------------------#
+#----Working with XHR below----#
+#------------------------------#
 
 
 class XhrHandler(Base):
 
     def get(self):
-        self.render_template("xhr_form")
-        #self.response.write(self.request.get("content"))
+        comments = opeth.model.Comment.query().order(opeth.model.Comment.date_added)
+
+        template_values = {'comments': comments, 'ids': comments}
+        self.render_template("xhr_form", template_values)
 
     def post(self):
-        comment_store = opeth.model.Comment(content=self.request.POST['content'])
-        comment_store.put()
 
-        ctx = opeth.model.ndb.get_context()
-        ctx.clear_cache()
+        json_comment = json.loads(self.request.body)
 
-        comments = opeth.model.Comment.query()
+        if "delete" in json_comment:
+            opeth.model.ndb.Key("Comment", int(json_comment["delete"])).delete()
 
-        template_values = {'comments': comments}
-        self.render_template("output", template_values)
+        else:
+            comment_store = opeth.model.Comment(content=json_comment["content"])
+            comment_key = comment_store.put()
 
+            comment_id = comment_key.id()
+
+            ctx = opeth.model.ndb.get_context()
+            ctx.clear_cache()
+
+            comments = opeth.model.Comment.query()
+
+            self.response.write(comment_id)
 
 app = webapp2.WSGIApplication([
     ('/form', MainHandler),
