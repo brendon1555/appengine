@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script type="text/javascript" src="/js/script.js">
+
+
+    </script>
+    <title>Bands</title>
+</head>
+<body>
+        <div>Band: <input type="text" name="band" id="band"></div>
+        <div><button onclick="addBand();">Add Band</button></div> 
+
+        <ul id="bands">
+            {% for band in bands %}
+            <li id="{{ band.key.id() }}">{{ band.name }}
+                <a href="/band/{{ band.key.id() }}/album">See Albums</a>
+                <button onclick="deleteBand(this.parentNode.id)">Delete Band</button>
+            </li>
+            {% endfor %}
+        </ul>
+</body>
+</html>

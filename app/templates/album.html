@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script type="text/javascript" src="/js/script.js">
+
+
+    </script>
+    <title>Albums</title>
+</head>
+<body>
+        <div id="band-name">{{ band.name }}</div>
+        <div>Album: <input type="text" name="album" id="album"></div>
+        <div><button onclick="addAlbum();">Add Album</button></div>
+
+        <ul id="albums">
+            {% for album in albums %}
+            <li onclick="deleteAlbum(this.id)" id="{{ album.key.id() }}">{{ album.name }} (Click to delete)</li>
+            {% endfor %}
+        </ul>
+</body>
+</html>
