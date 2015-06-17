@@ -1,6 +1,9 @@
-import cgi
+import prestans.rest
+import prestans.parser
+
 import webapp2
 import json
+
 from webapp2_extras import jinja2
 
 import opeth.model
@@ -113,13 +116,3 @@ class AlbumEntity(Base):
     def delete(self, band_id, album_id):
         opeth.model.ndb.Key("Album", int(album_id)).delete()
         self.response.status = "204 No Content"
-
-
-
-app = webapp2.WSGIApplication([
-    (r'/form', MainHandler),
-    (r'/band', BandCollection),
-    (r'/band/(\d+)', BandEntity),
-    (r'/band/(\d+)/album', AlbumCollection),
-    (r'/band/(\d+)/album/(\d+)', AlbumEntity)
-], debug=True)

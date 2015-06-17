@@ -12,15 +12,19 @@ handlers:
 - url: /js
   static_dir: js
 
-- url: /
+- url: /.*
   script: main.app
 
-- url: /.*
-  script: opeth.handler.app
+- url: /api/.*
+  script: main.api
+
 
 libraries:
 - name: webapp2
   version: "2.5.2"
 
 - name: jinja2
+  version: latest
+
+- name: webob
   version: latest

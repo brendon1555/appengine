@@ -15,11 +15,29 @@
 # limitations under the License.
 #
 import webapp2
+import prestans.rest
+
+import opeth.page.handler
+import opeth.rest.handler
+
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
         self.response.write('Hello world!')
 
+api = prestans.rest.RequestRouter([
+
+    (r'/api/band', opeth.rest.handler.BandCollection),
+    #(r'/api/band/(\d+)', opeth.rest.handler.BandEntity),
+    #(r'/api/band/(\d+)/album', opeth.rest.handler.AlbumCollection),
+    #(r'/api/band/(\d+)/album/(\d+)', opeth.rest.handler.AlbumEntity)
+
+], application_name="opeth", debug=True)
+
 app = webapp2.WSGIApplication([
-    ('/', MainHandler)
+    (r'/form', opeth.page.handler.MainHandler),
+    (r'/band', opeth.page.handler.BandCollection),
+    (r'/band/(\d+)', opeth.page.handler.BandEntity),
+    (r'/band/(\d+)/album', opeth.page.handler.AlbumCollection),
+    (r'/band/(\d+)/album/(\d+)', opeth.page.handler.AlbumEntity)
 ], debug=True)
