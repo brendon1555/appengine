@@ -21,9 +21,9 @@ import opeth.page.handler
 import opeth.rest.handler
 
 
-class MainHandler(webapp2.RequestHandler):
-    def get(self):
-        self.response.write('Hello world!')
+#class MainHandler(webapp2.RequestHandler):
+#    def get(self):
+#        self.response.write('Hello world!')
 
 api = prestans.rest.RequestRouter([
 

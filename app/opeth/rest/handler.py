@@ -4,7 +4,6 @@ import prestans.parser
 import opeth.rest.model
 import opeth.model
 
-band_create_filter = prestans.parser.AttributeFilter.from_model(opeth.rest.model.Band())
 
 class BandCollection(prestans.rest.RequestHandler):
     __parser_config__ = prestans.parser.Config(
@@ -20,11 +19,11 @@ class BandCollection(prestans.rest.RequestHandler):
     def get(self):
         bands = opeth.model.Band.query()
 
-        self.response.http_status = prestans.http.STATUS_OK
+        self.response.status = prestans.http.STATUS.OK
         self.response.body = prestans.ext.data.adapters.ndb.adapt_persistent_collection(
             band, 
-            opeth.rest.model.Band, 
-            self.response.attribute_filter)
+            opeth.rest.model.Band
+        )
 
     def post(self):
         band_rest_model = self.request.parsed_body
