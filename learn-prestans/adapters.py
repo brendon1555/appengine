@@ -11,3 +11,17 @@ prestans.ext.data.adapters.registry.register_adapter(
         persistent_model_class=pagemodels.Band
     )
 )
+
+prestans.ext.data.adapters.registry.register_adapter(
+    prestans.ext.data.adapters.ndb.ModelAdapter(
+        rest_model_class=restmodels.Album,
+        persistent_model_class=pagemodels.Album
+    )
+)
+
+prestans.ext.data.adapters.registry.register_adapter(
+    prestans.ext.data.adapters.ndb.ModelAdapter(
+        rest_model_class=restmodels.Track,
+        persistent_model_class=pagemodels.Track
+    )
+)
