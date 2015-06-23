@@ -11,7 +11,7 @@ handlers:
 
 - url: /api/.*
   script: main.api
-  login: required
+  #login: required
 
 - url: .*
   script: main.app

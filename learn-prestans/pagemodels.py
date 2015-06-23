@@ -14,34 +14,26 @@ class Track(Base):
     name = ndb.StringProperty()
 
     @classmethod
-    def make_key(self, band_id, album_id, request):
-        track_key = Track(
-            name=request.name, 
-            parent=Album.get_by_key(band_id, album_id)
-        )
+    def make_key(self, band_id, album_id, track_id):
+        track_key = ndb.Key("Band", int(band_id), "Album", int(album_id), "Track", int(track_id))
         return track_key
 
     @classmethod
     def get_by_key(self, band_id, album_id, track_id):
-        track_key = ndb.Key("Band", int(band_id), "Album", int(album_id), "Track", int(track_id))
-        return track_key
+        return self.make_key(band_id, album_id, track_id).get()
 
 
 class Album(Base):
     name = ndb.StringProperty()
 
     @classmethod
-    def make_key(self, band_id, request):
-        album_key = Album(
-            name=request.name, 
-            parent=Band.get_by_key(band_id)
-        )
+    def make_key(self, band_id, album_id):
+        album_key = ndb.Key("Band", int(band_id), "Album", int(album_id))
         return album_key
 
     @classmethod
     def get_by_key(self, band_id, album_id):
-        album_key = ndb.Key("Band", int(band_id), "Album", int(album_id))
-        return album_key
+        return self.make_key(band_id, album_id).get()
 
 
 class Band(Base):
