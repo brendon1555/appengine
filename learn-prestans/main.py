@@ -112,7 +112,6 @@ class RestBandEntityHandler(Base):
 
     @prestans.provider.auth.login_required
     def delete(self, band_id):
-        #pagemodels.Band.get_by_key(band_id).key.delete()
         band = pagemodels.Band.get_by_key(band_id)
         if band is None:
             raise prestans.exception.NotFound("Band")
@@ -175,7 +174,6 @@ class RestAlbumEntityHandler(Base):
 
     @prestans.provider.auth.login_required
     def delete(self, band_id, album_id):
-        #pagemodels.Album.get_by_key(band_id, album_id).key.delete()
         album = pagemodels.Album.get_by_key(band_id, album_id)
         if album is None:
             raise prestans.exception.NotFound("Album")
@@ -197,7 +195,6 @@ class RestTrackCollectionHandler(Base):
 
     def get(self, band_id, album_id):
         album = pagemodels.Album.get_by_key(band_id, album_id)
-        self.logger.error(album)
         if album is None:
             raise prestans.exception.NotFound("Album")
         
