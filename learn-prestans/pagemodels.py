@@ -38,7 +38,6 @@ class Album(Base):
 
 class Band(Base):
     name = ndb.StringProperty()
-    #albums = ndb.KeyProperty(kind=Album, required=False, repeated=True)
 
     @classmethod
     def make_key(self, band_id):

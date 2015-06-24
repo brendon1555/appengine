@@ -23,7 +23,6 @@ import prestans.parser
 import prestans.types
 import prestans.provider.auth
 import prestans.ext.appengine
-
 import prestans.ext.data.adapters.ndb
 
 import restmodels
@@ -69,7 +68,6 @@ class RestBandCollectionHandler(Base):
         ),
         POST=prestans.parser.VerbConfig(
             body_template=restmodels.Band(),
-            response_attribute_filter_default_value=True,
             response_template=None
         )
     )
@@ -107,14 +105,19 @@ class RestBandEntityHandler(Base):
     def get(self, band_id):
         band = pagemodels.Band.get_by_key(band_id)
         if band is None:
-            raise prestans.exception.NotFound("The band was not found")
+            raise prestans.exception.NotFound("Band")
         
         self.response.http_status = prestans.http.STATUS.OK
         self.response.body = restmodels.Band(name=band.name)
 
     @prestans.provider.auth.login_required
     def delete(self, band_id):
-        pagemodels.Band.get_by_key(band_id).key.delete()
+        #pagemodels.Band.get_by_key(band_id).key.delete()
+        band = pagemodels.Band.get_by_key(band_id)
+        if band is None:
+            raise prestans.exception.NotFound("Band")
+
+        pagemodels.ndb.delete_multi(pagemodels.ndb.Query(ancestor=band.key).iter(keys_only=True))
 
 
 class RestAlbumCollectionHandler(Base):
@@ -126,8 +129,7 @@ class RestAlbumCollectionHandler(Base):
         ),
         POST=prestans.parser.VerbConfig(
             body_template=restmodels.Album(),
-            response_attribute_filter_default_value=True,
-            response_template=restmodels.Album()
+            response_template=None
         )
     )
 
@@ -166,14 +168,18 @@ class RestAlbumEntityHandler(Base):
     def get(self, band_id, album_id):
         album = pagemodels.Album.get_by_key(band_id, album_id)
         if album is None:
-            raise prestans.exception.NotFound("The album was not found")
+            raise prestans.exception.NotFound("Album")
         
         self.response.http_status = prestans.http.STATUS.OK
         self.response.body = restmodels.Album(name=album.name)
 
     @prestans.provider.auth.login_required
     def delete(self, band_id, album_id):
-        pagemodels.Album.get_by_key(band_id, album_id).key.delete()
+        #pagemodels.Album.get_by_key(band_id, album_id).key.delete()
+        album = pagemodels.Album.get_by_key(band_id, album_id)
+        if album is None:
+            raise prestans.exception.NotFound("Album")
+        pagemodels.ndb.delete_multi(pagemodels.ndb.Query(ancestor=album.key).iter(keys_only=True))
 
 
 class RestTrackCollectionHandler(Base):
@@ -185,8 +191,7 @@ class RestTrackCollectionHandler(Base):
         ),
         POST=prestans.parser.VerbConfig(
             body_template=restmodels.Track(),
-            response_attribute_filter_default_value=True,
-            response_template=restmodels.Track()
+            response_template=None
         )
     )
 
@@ -194,7 +199,7 @@ class RestTrackCollectionHandler(Base):
         album = pagemodels.Album.get_by_key(band_id, album_id)
         self.logger.error(album)
         if album is None:
-            raise prestans.exception.NotFound("No Tracks were found")
+            raise prestans.exception.NotFound("Album")
         
         self.response.status = prestans.http.STATUS.OK
         self.response.body = prestans.ext.data.adapters.ndb.adapt_persistent_collection(
@@ -227,14 +232,18 @@ class RestTrackEntityHandler(Base):
     def get(self, band_id, album_id, track_id):
         track = pagemodels.Track.get_by_key(band_id, album_id, track_id)
         if track is None:
-            raise prestans.exception.NotFound("The track was not found")
+            raise prestans.exception.NotFound("Track")
         
         self.response.body = restmodels.Track(name=track.name)
         self.response.http_status = prestans.http.STATUS.OK
 
     @prestans.provider.auth.login_required
     def delete(self, band_id, album_id, track_id):
-        pagemodels.Track.get_by_key(band_id, album_id, track_id).key.delete()
+        track = pagemodels.Track.get_by_key(band_id, album_id, track_id)
+        if track is None:
+            raise prestans.exception.NotFound("Track")
+
+        track.key.delete()
 
 
 #webapp2 router
