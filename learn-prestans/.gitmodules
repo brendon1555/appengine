@@ -1,0 +1,15 @@
+[submodule "client/prestans"]
+	path = client/prestans
+	url = https://github.com/anomaly/prestans-client.git
+	branch = master
+[submodule "ext/prestans"]
+	path = ext/prestans
+	url = https://github.com/anomaly/prestans
+	branch = master
+[submodule "etc/closure-compiler"]
+	path = etc/closure-compiler
+	url = https://github.com/google/closure-compiler.git
+[submodule "client/closure-library"]
+	path = client/closure-library
+	url = https://github.com/google/closure-library.git
+	branch = master
